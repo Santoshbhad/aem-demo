@@ -1,0 +1,47 @@
+package com.aem.community.core.servlets;
+
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.apache.sling.commons.json.JSONException;
+import org.apache.sling.commons.json.JSONObject;
+
+import javax.jcr.Repository;
+import javax.servlet.ServletException;
+import java.io.IOException;
+
+import org.apache.felix.scr.annotations.Reference;
+import org.apache.felix.scr.annotations.sling.SlingServlet;
+
+
+/**
+ * Servlet that writes some sample content into the response. It is mounted for
+ * all resources of a specific Sling resource type. The
+ * {@link SlingSafeMethodsServlet} shall be used for HTTP methods that are
+ * idempotent. For write operations use the {@link SlingAllMethodsServlet}.
+ */
+@SuppressWarnings("serial")
+@SlingServlet(paths = "/bin/test")
+public class SimpleServlet extends SlingSafeMethodsServlet {
+    @Reference
+    private Repository repository;
+    @Override
+    protected void doGet(final SlingHttpServletRequest req,
+                         final SlingHttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        String keys[] = repository.getDescriptorKeys();
+        JSONObject jsonobject = new JSONObject();
+        for(int i=0;i<keys.length;i++){
+            try {
+                jsonobject.put(keys[i], repository.getDescriptor(keys[i]));
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        resp.getWriter().println(jsonobject.toString());
+
+    }
+}
