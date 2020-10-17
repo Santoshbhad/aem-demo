@@ -1,0 +1,20 @@
+
+https://aem.redquark.org/2018/10/day-10-getting-to-know-sling-models.html
+
+to check the result hit the url
+http://localhost:4502/bin/slingmodel/user
+
+calling model clss method in html
+
+
+retriving jcr data and showing it on the page
+http://localhost:4502/bin/slingmodel/user
+
+
+
+
+deploy project :
+mvn -PautoInstallPackage -Padobe-public clean install
+
+
+
